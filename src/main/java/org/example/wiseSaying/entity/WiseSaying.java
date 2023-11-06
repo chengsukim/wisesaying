@@ -1,4 +1,4 @@
-package org.example;
+package org.example.wiseSaying.entity;
 
 public class WiseSaying {
     // 번호에들어갈 인스턴스 정수형 변수
@@ -8,7 +8,7 @@ public class WiseSaying {
     // 작가에 들어갈 인스턴스 문자열 변수
     private String author;
 
-    // WiseSaying 클래스에서 선언된 변수들을 다른 클래스와 공유하기 위해 생성자 함수 선언
+    // WiseSaying 클래스에서 선뇬언된 변수들을 다른 클래스와 공유하기 위해 생성자 함수 선언
     public WiseSaying (long id , String content , String author){
         this.id = id;
         this.content = content;

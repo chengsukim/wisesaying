@@ -1,8 +1,16 @@
 package org.example;
 
+// 코드 최적화를 위해 시스템 모듈과 명언 모듈을 생성
+// 리펙토링을 통한 코드최적화를 이용해 코드구분을 쉽게 할 수 있다.
+
+import org.example.system.controller.SystemController;
+import org.example.wiseSaying.controller.WiseSayingController;
+import org.example.wiseSaying.entity.WiseSaying;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.List;
+
 public class App {
     // 최적화를 위한 로직 main은 출력만을 담당
 
@@ -16,18 +24,15 @@ public class App {
     }
 
     public void run() {
-
+        // 시스템 모듈과 명언 모듈을 공유하기 위해 애플리케이션에 객체를 생성
+        SystemController systemController = new SystemController();
+        WiseSayingController wiseSayingController = new WiseSayingController(sc);
 
         // 스캐너 초기화
         // 명언앱 출력매체
         System.out.println("== 명언앱 == ");
         Scanner sc = new Scanner(System.in);
 
-        // 명언 번호를 증가 시켜줄 long타입 변수 선언
-        long lastWiseSayingId = 1;
-        // WiseSaying 객체 배열을 공유하기 위한 List 변수 선언
-        // WiseSaying 객체에 인스턴스배열을 선언해 줌으로써 객체타입을 받을 수 있다.
-        List<WiseSaying>wiseSayings = new ArrayList<>();
         // while 반복문을 이용하여 조건에 부합할 때 까지 출력
         while (true) {
             System.out.printf("명령) ");
@@ -35,40 +40,22 @@ public class App {
             String command = sc.nextLine().trim();
             // 조건에 부합했을 시 의도한 바를 출력 할 수 있게 조건문 선언
             if (command.equals("종료")) {
-                System.out.println("시스템을 종료합니다");
+                systemController.exit();
                 break;
             }
 
             // 명언과 작가를 등록하기 위해 else-if 조건문으로 연결시켜 출력시키기
             else if (command.equals("등록")) {
-                // 명언 출력매체
-                System.out.printf("명언 : ");
-                // 명언을 출력해주기 위한 문자열 변수선언
-                String content = sc.nextLine().trim();
-                // 작가 출력매체
-                System.out.printf("작가 : ");
-                // 작가정보를 출력해주기 위한 문자열 변수선언
-                String author = sc.nextLine().trim();
-                // 위에 long 타입 변수를 이용해 명언 번호가 증가하도록 출력
-                System.out.printf("%d번 명언이 등록되었습니다\n" , lastWiseSayingId);
-
-                // new WiseSaying이라는 객체를 선언해 줌으로써 WiseSaying 클래스 안에 있는 객체 함수를 받아온다
-                WiseSaying wiseSaying = new WiseSaying(lastWiseSayingId , content , author);
-                // ArrayList객체에 있는 wiseSayings변수에 wiseSaying 객체 함수를 더해주기 위해 add 변수선언
-                wiseSayings.add(wiseSaying);
-
-
-                // 출력이 될때마다 명언번호가 증가해야 하기 때문에 증가부호를 붙여줌
-                lastWiseSayingId++;
+                // 명언 모듈에 있는 등록 코드들을 가져오기위해 wiseSayingController변수에
+                // WiseSayingController클래스안에 있는 write생성자 함수를 연결
+                wiseSayingController.write();
 
             } else if (command.equals("목록")) {
-                System.out.println("번호 / 명언 / 작가\n");
-           // 순환적으로 목록을 등록하기 위한 for반복문 선언
-            for(int i = wiseSayings.size(); i >= 0; i--) {
-               WiseSaying wiseSaying = wiseSayings.get(i);
-                System.out.printf("%d / %s / %s\n" , wiseSaying.getId() , wiseSaying.getContent(),wiseSaying.getAuthor());
-
-            }
+                // 명언 모듈에 있는 목록 코드들을 가져오기위해 wiseSayingController변수에
+                // WiseSayingController클래스안에 있는 list생성자 함수를 연결
+                wiseSayingController.list();
+            } else if (command.equals("삭제")) {
+                System.out.println("");
 
             }
 
